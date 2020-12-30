@@ -20,10 +20,10 @@ pub fn print_test() {
 }
 
 pub fn buid_test() {
-  let format = sb.s("Hello ")
+  let formatter = sb.s("Hello ")
     |> sb.bs(sb.string())
     |> sb.bs(sb.int())
 
-  sb.print(format)(1)("Sam")
+  sb.print(formatter)("Sam")(1)
   |> should.equal("Hello Sam1")
 }

@@ -39,7 +39,7 @@ pub fn concat(l: List(String)) -> String {
 
 // {-| Compose two formatters together.
 // -}
-pub fn bs(f1: Format(b, a), f2: Format(a,c)) -> Format(b,c) {
+pub fn bs(f2: Format(a,c), f1: Format(b,a)) -> Format(b,c) {
   fn(callback) {
     f2(
       fn(str_from_f2) {
