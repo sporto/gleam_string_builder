@@ -20,10 +20,13 @@ pub fn print_test() {
 }
 
 pub fn buid_test() {
-  let formatter = sb.s("Hello ")
-    |> sb.bs(sb.string())
-    |> sb.bs(sb.int())
+  let formatter = sb.init()
+    |> sb.string("Hello ")
+    |> sb.string(" ")
+    |> sb.string_arg
+    |> sb.int_arg
+    // |> sb.string("!!")
 
   sb.print(formatter)("Sam")(1)
-  |> should.equal("Hello Sam1")
+  |> should.equal("Hello Sam 1!!")
 }

@@ -8,19 +8,35 @@ pub fn hello_world() -> String {
   "Hello, from gleam_string_builder!"
 }
 
+pub fn init() {
+  hardcoded_string("")
+}
+
+pub fn string(formatter, str) {
+  compose(formatter, hardcoded_string(str))
+}
+
+pub fn string_arg(formatter) {
+  compose(formatter, placeholder_string())
+}
+
+pub fn int_arg(formatter) {
+  compose(formatter, placeholder_int())
+}
+
 // A hardcoded string
-pub fn s(str: String) -> Format(r, r) {
+pub fn hardcoded_string(str: String) -> Format(r, r) {
   fn(callback) {
     callback(str)
   }
 }
 
 // Placeholder for a string argument
-pub fn string() -> Format(r, fn(String) -> r){
+pub fn placeholder_string() -> Format(r, fn(String) -> r){
   fn(s) { s }
 }
 
-pub fn int() -> Format(r, fn(Int) -> r) {
+pub fn placeholder_int() -> Format(r, fn(Int) -> r) {
   to_formatter(gleam_int.to_string)
 }
 
@@ -39,7 +55,7 @@ pub fn concat(l: List(String)) -> String {
 
 // {-| Compose two formatters together.
 // -}
-pub fn bs(f2: Format(a,c), f1: Format(b,a)) -> Format(b,c) {
+pub fn compose(f2: Format(a,c), f1: Format(b,a)) -> Format(b,c) {
   fn(callback) {
     f2(
       fn(str_from_f2) {
