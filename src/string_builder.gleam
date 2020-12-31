@@ -4,7 +4,7 @@ import gleam/function
 
 type Callback(formatter) = fn(String) -> formatter
 
-// type Formatter() = fn(Callback(a)) -> (fn(b) -> String)
+type Fn(next_formatter, formatter) = fn(Callback(next_formatter)) -> formatter
 
 pub fn dummy_formmater() {
   fn(str: String) {
@@ -16,19 +16,21 @@ pub fn dummy_formmater() {
 
 pub fn string(
     str: String
-  ) -> fn(Callback(formatter)) -> formatter {
+  )
+    -> Fn(formatter, formatter)
+  {
 
   fn(callback: Callback(formatter)) {
     callback(str)
   }
 }
 
-// pub fn and_string(previous, str: String) {
-//   compose(previous, string(str))
-// }
+pub fn and_string(previous, str: String) {
+  compose(previous, string(str))
+}
 
 pub fn string_arg()
-    -> fn(Callback(formatter)) -> fn(String) -> formatter
+    -> Fn(formatter, fn(String) -> formatter)
   {
 
   fn(callback: Callback(formatter)) {
@@ -38,8 +40,12 @@ pub fn string_arg()
   }
 }
 
+pub fn and_string_arg(previous) -> Fn(a, b) {
+  previous |> compose(string_arg())
+}
+
 pub fn int_arg()
-    -> fn(Callback(formatter)) -> fn(Int) -> formatter
+    -> Fn(formatter, fn(Int) -> formatter)
   {
 
   fn(callback: Callback(formatter)) {
@@ -49,13 +55,17 @@ pub fn int_arg()
   }
 }
 
+pub fn and_int_arg(previous) {
+  compose(previous, int_arg())
+}
+
 pub fn caller(s) {
   s
 }
 
-pub fn compose(previous, next) {
-  // Get the result of the previous as pass to the next
-  fn(callback: Callback(formatter)) {
+pub fn compose(previous: Fn(f2, f1), next: Fn(f3, f2)) -> Fn(f3, f1) {
+  // Get the result of the previous and pass to the next
+  fn(callback: Callback(f3)) {
     previous(
       fn(previous_str: String) {
         next(

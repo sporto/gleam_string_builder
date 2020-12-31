@@ -5,14 +5,20 @@ import gleam/string
 
 pub fn buid_test() {
   let formatter = sb.string("Hello ")
-    |> sb.compose(sb.string("Hola "))
-    |> sb.compose(sb.string_arg())
-    |> sb.compose(sb.int_arg())
+    // |> sb.compose(sb.string("Hola "))
+    |> sb.and_string("Hola ")
+    // |> sb.compose(sb.string_arg())
+    |> sb.and_string_arg()
+    |> sb.compose(sb.string(" "))
+    // |> sb.and_string(" ")
+    // |> sb.compose(sb.int_arg())
+    |> sb.and_int_arg()
     |> sb.compose(sb.string("!"))
     |> sb.compose(sb.string_arg())
+    |> sb.compose(sb.int_arg())
 
-  formatter(sb.caller)("Sam")(1)(" and ")
-  |> should.equal("Hello Hola Sam1! and ")
+  formatter(sb.caller)("Sam")(1)(" and ")(2)
+  |> should.equal("Hello Hola Sam 1! and 2")
 }
 
 pub fn uncurry_test()  {
