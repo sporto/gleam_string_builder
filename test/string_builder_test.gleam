@@ -4,7 +4,8 @@ import gleam/int
 import gleam/string
 
 pub fn using_compose_test() {
-  let formatter = sb.string("My name ")
+  let formatter =
+    sb.string("My name ")
     |> sb.compose(sb.string("is "))
     |> sb.compose(sb.string_arg())
     |> sb.compose(sb.string(" and I have "))
@@ -26,7 +27,8 @@ pub fn using_compose_test() {
 }
 
 pub fn using_and_test() {
-  let formatter = sb.string("My name ")
+  let formatter =
+    sb.string("My name ")
     |> sb.and_string("is ")
     |> sb.and_string_arg()
     |> sb.and_string(" and I have ")
@@ -43,7 +45,36 @@ pub fn using_and_test() {
     |> sb.and_int(1)
     |> sb.and_string(" snake!")
 
-
   formatter(sb.caller)("Sally")(3)("dogs")(2)("cats")
   |> should.equal("My name is Sally and I have 3 dogs, 2 cats and 1 snake!")
+}
+
+type State {
+  Pending
+  Done
+}
+
+fn state_to_string(state: State) -> String {
+  case state {
+    Pending -> "pending"
+    Done -> "done"
+  }
+}
+
+pub fn custom_formatter_test() {
+  let custom_state_formatter = fn(callback) {
+    fn(input: State) {
+      input
+      |> state_to_string
+      |> callback
+    }
+  }
+
+  let formatter =
+    sb.string("The current state is ")
+    |> sb.compose(custom_state_formatter)
+    |> sb.and_string("!")
+
+  formatter(sb.caller)(Done)
+  |> should.equal("The current state is done!")
 }
