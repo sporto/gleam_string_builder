@@ -22,7 +22,7 @@ pub fn using_compose_test() {
     |> sb.compose(sb.int(1))
     |> sb.compose(sb.string(" snake!"))
 
-  formatter(sb.caller)("Sally")(3)("dogs")(2)("cats")
+  formatter(sb.identity)("Sally")(3)("dogs")(2)("cats")
   |> should.equal("My name is Sally and I have 3 dogs, 2 cats and 1 snake!")
 }
 
@@ -45,17 +45,56 @@ pub fn using_and_test() {
     |> sb.and_int(1)
     |> sb.and_string(" snake!")
 
-  formatter(sb.caller)("Sally")(3)("dogs")(2)("cats")
+  formatter(sb.identity)("Sally")(3)("dogs")(2)("cats")
   |> should.equal("My name is Sally and I have 3 dogs, 2 cats and 1 snake!")
 }
 
-pub fn caller_test() {
+pub fn call0_test() {
   let formatter =
-    sb.string("Hello ")
-    |> sb.and_string_arg
+    sb.string("My name is ")
+    |> sb.and_string("Sally.")
+    |> sb.call0
 
-  formatter(sb.caller)("Sally")
-  |> should.equal("Hello Sally")
+  formatter()
+  |> should.equal("My name is Sally.")
+}
+
+pub fn call1_test() {
+  let formatter =
+    sb.string("My name is ")
+    |> sb.and_string_arg
+    |> sb.and_string(".")
+    |> sb.call1
+
+  formatter("Sally")
+  |> should.equal("My name is Sally.")
+}
+
+pub fn call2_test() {
+  let formatter =
+    sb.string("My name is ")
+    |> sb.and_string_arg
+    |> sb.and_string(" and I'm ")
+    |> sb.and_int_arg
+    |> sb.and_string(" years old.")
+    |> sb.call2
+
+  formatter("Sally", 20)
+  |> should.equal("My name is Sally and I'm 20 years old.")
+}
+
+pub fn call3_test() {
+  let formatter =
+    sb.string_arg
+    |> sb.and_string(" has ")
+    |> sb.and_int_arg
+    |> sb.and_string(" dogs and ")
+    |> sb.and_int_arg
+    |> sb.and_string(" cats.")
+    |> sb.call3
+
+  formatter("Sam", 2, 3)
+  |> should.equal("Sam has 2 dogs and 3 cats.")
 }
 
 type State {
@@ -84,15 +123,6 @@ pub fn custom_formatter_test() {
     |> sb.compose(custom_state_formatter)
     |> sb.and_string("!")
 
-  formatter(sb.caller)(Done)
+  formatter(sb.identity)(Done)
   |> should.equal("The current state is done!")
-}
-
-pub fn uncurry_test() {
-  let f1 = fn(a: Int) { fn(b: Int) { fn(c: Int) { a + b + c } } }
-
-  let f2 = sb.uncurry3(f1)
-
-  f2(1, 2, 3)
-  |> should.equal(6)
 }

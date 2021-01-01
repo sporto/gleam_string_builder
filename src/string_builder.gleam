@@ -44,7 +44,8 @@ pub fn and_int_arg(previous) -> Fn(a, b) {
   compose(previous, int_arg)
 }
 
-pub fn caller(s) {
+// identity
+pub fn identity(s) {
   s
 }
 
@@ -59,6 +60,36 @@ pub fn compose(previous: Fn(f2, f1), next: Fn(f3, f2)) -> Fn(f3, f1) {
   }
 }
 
-pub fn uncurry3(fun) {
+fn uncurry2(fun) {
+  fn(a, b) { fun(a)(b) }
+}
+
+fn uncurry3(fun) {
   fn(a, b, c) { fun(a)(b)(c) }
+}
+
+fn uncurry4(fun) {
+  fn(a, b, c, d) { fun(a)(b)(c)(d) }
+}
+
+fn uncurry5(fun) {
+  fn(a, b, c, d, e) { fun(a)(b)(c)(d)(e) }
+}
+
+pub fn call0(formatter) {
+  fn() { formatter(identity) }
+}
+
+pub fn call1(formatter) {
+  formatter(identity)
+}
+
+pub fn call2(formatter) {
+  formatter(identity)
+  |> uncurry2
+}
+
+pub fn call3(formatter) {
+  formatter(identity)
+  |> uncurry3
 }
