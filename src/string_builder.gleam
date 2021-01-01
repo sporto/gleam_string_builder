@@ -2,17 +2,9 @@ import gleam/int as gleam_int
 import gleam/string
 import gleam/function
 
-type Callback(formatter) = fn(String) -> formatter
+type Callback(next_formatter) = fn(String) -> next_formatter
 
 type Fn(next_formatter, formatter) = fn(Callback(next_formatter)) -> formatter
-
-pub fn dummy_formmater() {
-  fn(str: String) {
-    fn(int: Int) {
-      "Ok"
-    }
-  }
-}
 
 pub fn string(
     str: String
@@ -20,13 +12,28 @@ pub fn string(
     -> Fn(formatter, formatter)
   {
 
-  fn(callback: Callback(formatter)) {
+  fn(callback: Callback(formatter)) -> formatter {
     callback(str)
   }
 }
 
-pub fn and_string(previous, str: String) {
+pub fn and_string(previous: Fn(f1, f2), str: String) -> Fn(f1, f2) {
   compose(previous, string(str))
+}
+
+pub fn int(
+    n: Int
+  )
+    -> Fn(formatter, formatter)
+  {
+
+  fn(callback: Callback(formatter)) -> formatter {
+    callback(gleam_int.to_string(n))
+  }
+}
+
+pub fn and_int(previous: Fn(f1, f2), n: Int) -> Fn(f1, f2) {
+  compose(previous, int(n))
 }
 
 pub fn string_arg()
@@ -55,7 +62,7 @@ pub fn int_arg()
   }
 }
 
-pub fn and_int_arg(previous) {
+pub fn and_int_arg(previous) -> Fn(a, b) {
   compose(previous, int_arg())
 }
 

@@ -3,25 +3,47 @@ import gleam/should
 import gleam/int
 import gleam/string
 
-pub fn buid_test() {
-  let formatter = sb.string("Hello ")
-    // |> sb.compose(sb.string("Hola "))
-    |> sb.and_string("Hola ")
-    // |> sb.compose(sb.string_arg())
-    |> sb.and_string_arg()
-    |> sb.compose(sb.string(" "))
-    // |> sb.and_string(" ")
-    // |> sb.compose(sb.int_arg())
-    |> sb.and_int_arg()
-    |> sb.compose(sb.string("!"))
+pub fn using_compose_test() {
+  let formatter = sb.string("My name ")
+    |> sb.compose(sb.string("is "))
     |> sb.compose(sb.string_arg())
+    |> sb.compose(sb.string(" and I have "))
     |> sb.compose(sb.int_arg())
+    |> sb.compose(sb.string(" "))
+    // dogs
+    |> sb.compose(sb.string_arg())
+    |> sb.compose(sb.string(", "))
+    |> sb.compose(sb.int_arg())
+    |> sb.compose(sb.string(" "))
+    // cats
+    |> sb.compose(sb.string_arg())
+    |> sb.compose(sb.string(" and "))
+    |> sb.compose(sb.int(1))
+    |> sb.compose(sb.string(" snake!"))
 
-  formatter(sb.caller)("Sam")(1)(" and ")(2)
-  |> should.equal("Hello Hola Sam 1! and 2")
+  formatter(sb.caller)("Sally")(3)("dogs")(2)("cats")
+  |> should.equal("My name is Sally and I have 3 dogs, 2 cats and 1 snake!")
 }
 
-pub fn uncurry_test()  {
-  sb.dummy_formmater()("Hello")(1)
-  |> should.equal("Ok")
+pub fn using_and_test() {
+  let formatter = sb.string("My name ")
+    |> sb.and_string("is ")
+    |> sb.and_string_arg()
+    |> sb.and_string(" and I have ")
+    |> sb.and_int_arg()
+    |> sb.and_string(" ")
+    // dogs
+    |> sb.and_string_arg()
+    |> sb.and_string(", ")
+    |> sb.and_int_arg()
+    |> sb.and_string(" ")
+    // cats
+    |> sb.and_string_arg()
+    |> sb.and_string(" and ")
+    |> sb.and_int(1)
+    |> sb.and_string(" snake!")
+
+
+  formatter(sb.caller)("Sally")(3)("dogs")(2)("cats")
+  |> should.equal("My name is Sally and I have 3 dogs, 2 cats and 1 snake!")
 }
