@@ -27,23 +27,21 @@ pub fn and_int(previous: Fn(f1, f2), n: Int) -> Fn(f1, f2) {
 }
 
 // A placeholder for a string
-pub fn string_arg() -> Fn(formatter, fn(String) -> formatter) {
-  fn(callback: Callback(formatter)) { fn(str: String) { callback(str) } }
+pub fn string_arg(callback: Callback(formatter)) {
+  fn(str: String) { callback(str) }
 }
 
 pub fn and_string_arg(previous) -> Fn(a, b) {
   previous
-  |> compose(string_arg())
+  |> compose(string_arg)
 }
 
-pub fn int_arg() -> Fn(formatter, fn(Int) -> formatter) {
-  fn(callback: Callback(formatter)) {
-    fn(int: Int) { callback(gleam_int.to_string(int)) }
-  }
+pub fn int_arg(callback: Callback(formatter)) {
+  fn(int: Int) { callback(gleam_int.to_string(int)) }
 }
 
 pub fn and_int_arg(previous) -> Fn(a, b) {
-  compose(previous, int_arg())
+  compose(previous, int_arg)
 }
 
 pub fn caller(s) {
@@ -59,4 +57,8 @@ pub fn compose(previous: Fn(f2, f1), next: Fn(f3, f2)) -> Fn(f3, f1) {
       })
     })
   }
+}
+
+pub fn uncurry3(fun) {
+  fn(a, b, c) { fun(a)(b)(c) }
 }
