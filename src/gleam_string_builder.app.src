@@ -1,6 +1,6 @@
 {application, gleam_string_builder,
- [{description, "A Gleam program"},
-  {vsn, "1.0.0"},
+ [{description, "A Gleam library for building strings"},
+  {vsn, "0.1.0"},
   {registered, []},
   {applications,
    [kernel,
