@@ -1,21 +1,21 @@
 # gleam_string_builder
 
-A Gleam program
+A Gleam library for building strings
 
-
-## Quick start
-
-```sh
-# Build the project
-rebar3 compile
-
-# Run the eunit tests
-rebar3 eunit
-
-# Run the Erlang REPL
-rebar3 shell
 ```
+let formatter =
+    sb.new
+    |> sb.string("The winner is ")
+    |> sb.arg_string
+    |> sb.string(" with ")
+    |> sb.arg_int
+    |> sb.string(" points!!")
+    |> sb.end2
 
+formatter("Sam", 12)
+==
+"The winner is Sam with 12 points!!"
+```
 
 ## Installation
 
