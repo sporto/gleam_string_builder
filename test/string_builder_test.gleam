@@ -5,45 +5,46 @@ import gleam/string
 
 pub fn using_compose_test() {
   let formatter =
-    sb.string("My name ")
-    |> sb.compose(sb.string("is "))
-    |> sb.compose(sb.string_arg)
-    |> sb.compose(sb.string(" and I have "))
-    |> sb.compose(sb.int_arg)
-    |> sb.compose(sb.string(" "))
+    sb.string_formatter("My name ")
+    |> sb.compose(sb.string_formatter("is "))
+    |> sb.compose(sb.arg_string_formatter)
+    |> sb.compose(sb.string_formatter(" and I have "))
+    |> sb.compose(sb.arg_int_formatter)
+    |> sb.compose(sb.string_formatter(" "))
     // dogs
-    |> sb.compose(sb.string_arg)
-    |> sb.compose(sb.string(", "))
-    |> sb.compose(sb.int_arg)
-    |> sb.compose(sb.string(" "))
+    |> sb.compose(sb.arg_string_formatter)
+    |> sb.compose(sb.string_formatter(", "))
+    |> sb.compose(sb.arg_int_formatter)
+    |> sb.compose(sb.string_formatter(" "))
     // cats
-    |> sb.compose(sb.string_arg)
-    |> sb.compose(sb.string(" and "))
-    |> sb.compose(sb.int(1))
-    |> sb.compose(sb.string(" snake!"))
+    |> sb.compose(sb.arg_string_formatter)
+    |> sb.compose(sb.string_formatter(" and "))
+    |> sb.compose(sb.int_formatter(1))
+    |> sb.compose(sb.string_formatter(" snake!"))
 
   formatter(sb.identity)("Sally")(3)("dogs")(2)("cats")
   |> should.equal("My name is Sally and I have 3 dogs, 2 cats and 1 snake!")
 }
 
-pub fn using_and_test() {
+pub fn shortform_test() {
   let formatter =
-    sb.string("My name ")
-    |> sb.and_string("is ")
-    |> sb.and_string_arg
-    |> sb.and_string(" and I have ")
-    |> sb.and_int_arg
-    |> sb.and_string(" ")
+    sb.new
+    |> sb.string("My name ")
+    |> sb.string("is ")
+    |> sb.arg_string
+    |> sb.string(" and I have ")
+    |> sb.arg_int
+    |> sb.string(" ")
     // dogs
-    |> sb.and_string_arg
-    |> sb.and_string(", ")
-    |> sb.and_int_arg
-    |> sb.and_string(" ")
+    |> sb.arg_string
+    |> sb.string(", ")
+    |> sb.arg_int
+    |> sb.string(" ")
     // cats
-    |> sb.and_string_arg
-    |> sb.and_string(" and ")
-    |> sb.and_int(1)
-    |> sb.and_string(" snake!")
+    |> sb.arg_string
+    |> sb.string(" and ")
+    |> sb.int(1)
+    |> sb.string(" snake!")
 
   formatter(sb.identity)("Sally")(3)("dogs")(2)("cats")
   |> should.equal("My name is Sally and I have 3 dogs, 2 cats and 1 snake!")
@@ -51,8 +52,9 @@ pub fn using_and_test() {
 
 pub fn call0_test() {
   let formatter =
-    sb.string("My name is ")
-    |> sb.and_string("Sally.")
+    sb.new
+    |> sb.string("My name is ")
+    |> sb.string("Sally.")
     |> sb.call0
 
   formatter()
@@ -61,9 +63,10 @@ pub fn call0_test() {
 
 pub fn call1_test() {
   let formatter =
-    sb.string("My name is ")
-    |> sb.and_string_arg
-    |> sb.and_string(".")
+    sb.new
+    |> sb.string("My name is ")
+    |> sb.arg_string
+    |> sb.string(".")
     |> sb.call1
 
   formatter("Sally")
@@ -72,11 +75,12 @@ pub fn call1_test() {
 
 pub fn call2_test() {
   let formatter =
-    sb.string("My name is ")
-    |> sb.and_string_arg
-    |> sb.and_string(" and I'm ")
-    |> sb.and_int_arg
-    |> sb.and_string(" years old.")
+    sb.new
+    |> sb.string("My name is ")
+    |> sb.arg_string
+    |> sb.string(" and I'm ")
+    |> sb.arg_int
+    |> sb.string(" years old.")
     |> sb.call2
 
   formatter("Sally", 20)
@@ -85,12 +89,13 @@ pub fn call2_test() {
 
 pub fn call3_test() {
   let formatter =
-    sb.string_arg
-    |> sb.and_string(" has ")
-    |> sb.and_int_arg
-    |> sb.and_string(" dogs and ")
-    |> sb.and_int_arg
-    |> sb.and_string(" cats.")
+    sb.new
+    |> sb.arg_string
+    |> sb.string(" has ")
+    |> sb.arg_int
+    |> sb.string(" dogs and ")
+    |> sb.arg_int
+    |> sb.string(" cats.")
     |> sb.call3
 
   formatter("Sam", 2, 3)
@@ -119,9 +124,10 @@ pub fn custom_formatter_test() {
   }
 
   let formatter =
-    sb.string("The current state is ")
+    sb.new
+    |> sb.string("The current state is ")
     |> sb.compose(custom_state_formatter)
-    |> sb.and_string("!")
+    |> sb.string("!")
 
   formatter(sb.identity)(Done)
   |> should.equal("The current state is done!")

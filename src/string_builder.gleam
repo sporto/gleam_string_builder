@@ -8,40 +8,44 @@ type Callback(next_formatter) =
 type Fn(next_formatter, formatter) =
   fn(Callback(next_formatter)) -> formatter
 
-pub fn string(str: String) -> Fn(formatter, formatter) {
+pub fn new(callback: Callback(formatter)) -> formatter {
+  callback("")
+}
+
+pub fn string_formatter(str: String) -> Fn(formatter, formatter) {
   fn(callback: Callback(formatter)) -> formatter { callback(str) }
 }
 
-pub fn and_string(previous: Fn(f1, f2), str: String) -> Fn(f1, f2) {
-  compose(previous, string(str))
+pub fn string(previous: Fn(f1, f2), str: String) -> Fn(f1, f2) {
+  compose(previous, string_formatter(str))
 }
 
-pub fn int(n: Int) -> Fn(formatter, formatter) {
+pub fn int_formatter(n: Int) -> Fn(formatter, formatter) {
   fn(callback: Callback(formatter)) -> formatter {
     callback(gleam_int.to_string(n))
   }
 }
 
-pub fn and_int(previous: Fn(f1, f2), n: Int) -> Fn(f1, f2) {
-  compose(previous, int(n))
+pub fn int(previous: Fn(f1, f2), n: Int) -> Fn(f1, f2) {
+  compose(previous, int_formatter(n))
 }
 
 // A placeholder for a string
-pub fn string_arg(callback: Callback(formatter)) {
+pub fn arg_string_formatter(callback: Callback(formatter)) {
   fn(str: String) { callback(str) }
 }
 
-pub fn and_string_arg(previous) -> Fn(a, b) {
+pub fn arg_string(previous) -> Fn(a, b) {
   previous
-  |> compose(string_arg)
+  |> compose(arg_string_formatter)
 }
 
-pub fn int_arg(callback: Callback(formatter)) {
+pub fn arg_int_formatter(callback: Callback(formatter)) {
   fn(int: Int) { callback(gleam_int.to_string(int)) }
 }
 
-pub fn and_int_arg(previous) -> Fn(a, b) {
-  compose(previous, int_arg)
+pub fn arg_int(previous) -> Fn(a, b) {
+  compose(previous, arg_int_formatter)
 }
 
 // identity
