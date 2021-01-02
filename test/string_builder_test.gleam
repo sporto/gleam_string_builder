@@ -50,30 +50,30 @@ pub fn shortform_test() {
   |> should.equal("My name is Sally and I have 3 dogs, 2 cats and 1 snake!")
 }
 
-pub fn call0_test() {
+pub fn end0_test() {
   let formatter =
     sb.new
     |> sb.string("My name is ")
     |> sb.string("Sally.")
-    |> sb.call0
+    |> sb.end0
 
   formatter()
   |> should.equal("My name is Sally.")
 }
 
-pub fn call1_test() {
+pub fn end1_test() {
   let formatter =
     sb.new
     |> sb.string("My name is ")
     |> sb.arg_string
     |> sb.string(".")
-    |> sb.call1
+    |> sb.end1
 
   formatter("Sally")
   |> should.equal("My name is Sally.")
 }
 
-pub fn call2_test() {
+pub fn end2_test() {
   let formatter =
     sb.new
     |> sb.string("My name is ")
@@ -81,13 +81,13 @@ pub fn call2_test() {
     |> sb.string(" and I'm ")
     |> sb.arg_int
     |> sb.string(" years old.")
-    |> sb.call2
+    |> sb.end2
 
   formatter("Sally", 20)
   |> should.equal("My name is Sally and I'm 20 years old.")
 }
 
-pub fn call3_test() {
+pub fn end3_test() {
   let formatter =
     sb.new
     |> sb.arg_string
@@ -96,7 +96,7 @@ pub fn call3_test() {
     |> sb.string(" dogs and ")
     |> sb.arg_int
     |> sb.string(" cats.")
-    |> sb.call3
+    |> sb.end3
 
   formatter("Sam", 2, 3)
   |> should.equal("Sam has 2 dogs and 3 cats.")
@@ -128,7 +128,30 @@ pub fn custom_formatter_test() {
     |> sb.string("The current state is ")
     |> sb.compose(custom_state_formatter)
     |> sb.string("!")
+    |> sb.end1
 
-  formatter(sb.identity)(Done)
+  formatter(Done)
   |> should.equal("The current state is done!")
+}
+
+pub fn int_list_test() {
+  let formatter =
+    sb.new
+    |> sb.string("The winners are ")
+    |> sb.int_list([1, 2, 3])
+    |> sb.end0
+
+  formatter()
+  |> should.equal("The winners are 1, 2, 3")
+}
+
+pub fn arg_int_list_test() {
+  let formatter =
+    sb.new
+    |> sb.string("The winners are ")
+    |> sb.arg_int_list
+    |> sb.end1
+
+  formatter([1, 2, 3])
+  |> should.equal("The winners are 1, 2, 3")
 }
