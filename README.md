@@ -1,5 +1,7 @@
 # gleam_string_builder
 
+![test](https://github.com/sporto/gleam_string_builder/workflows/test/badge.svg)
+
 A Gleam library for building strings
 
 ```rust
