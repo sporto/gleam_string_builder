@@ -13,9 +13,11 @@ type Fn(next_formatter, formatter) =
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     ...
+/// ```
+/// let formatter =
+///   sb.new
+///   ...
+/// ```
 ///
 pub fn new(callback: Callback(formatter)) -> formatter {
   callback("")
@@ -31,9 +33,11 @@ pub fn string_formatter(str: String) -> Fn(formatter, formatter) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.string("Hello ")
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.string("Hello ")
+/// ```
 ///
 pub fn string(previous: Fn(f1, f2), str: String) -> Fn(f1, f2) {
   compose(previous, string_formatter(str))
@@ -49,10 +53,12 @@ pub fn arg_string_formatter(callback: Callback(formatter)) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.arg_string
-///     |> ...
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.arg_string
+///   |> ...
+/// ```
 ///
 pub fn arg_string(previous) -> Fn(a, b) {
   previous
@@ -71,10 +77,12 @@ pub fn int_formatter(n: Int) -> Fn(formatter, formatter) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.int(12)
-///     |> ...
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.int(12)
+///   |> ...
+/// ```
 ///
 pub fn int(previous: Fn(f1, f2), n: Int) -> Fn(f1, f2) {
   compose(previous, int_formatter(n))
@@ -90,10 +98,12 @@ pub fn arg_int_formatter(callback: Callback(formatter)) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.arg_int
-///     |> ...
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.arg_int
+///   |> ...
+/// ```
 ///
 pub fn arg_int(previous) -> Fn(a, b) {
   compose(previous, arg_int_formatter)
@@ -120,10 +130,12 @@ pub fn int_list_formatter(l: List(Int)) -> Fn(formatter, formatter) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.int_list([1,2,3])
-///     |> ...
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.int_list([1,2,3])
+///   |> ...
+/// ```
 ///
 pub fn int_list(previous: Fn(f1, f2), l: List(Int)) -> Fn(f1, f2) {
   compose(previous, int_list_formatter(l))
@@ -143,10 +155,12 @@ pub fn arg_int_list_formatter(callback: Callback(formatter)) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.arg_int_list
-///     |> ...
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.arg_int_list
+///   |> ...
+/// ```
 ///
 pub fn arg_int_list(previous) -> Fn(a, b) {
   compose(previous, arg_int_list_formatter)
@@ -162,10 +176,12 @@ pub fn identity(s) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.string("The current state is ")
-///     |> sb.compose(custom_state_formatter)
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.string("The current state is ")
+///   |> sb.compose(custom_state_formatter)
+/// ```
 ///
 pub fn compose(previous: Fn(f2, f1), next: Fn(f3, f2)) -> Fn(f3, f1) {
   // Get the result of the previous and pass to the next
@@ -198,10 +214,12 @@ fn uncurry5(fun) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.string("Hello")
-///     |> sb.end0
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.string("Hello")
+///   |> sb.end0
+/// ```
 ///
 pub fn end0(formatter) {
   fn() { formatter(identity) }
@@ -211,11 +229,13 @@ pub fn end0(formatter) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.string("Hello ")
-///     |> sb.arg_string
-///     |> sb.end1
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.string("Hello ")
+///   |> sb.arg_string
+///   |> sb.end1
+/// ```
 ///
 pub fn end1(formatter) {
   formatter(identity)
@@ -225,12 +245,14 @@ pub fn end1(formatter) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.string("Hello ")
-///     |> sb.arg_string
-///     |> sb.arg_int
-///     |> sb.end2
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.string("Hello ")
+///   |> sb.arg_string
+///   |> sb.arg_int
+///   |> sb.end2
+/// ```
 ///
 pub fn end2(formatter) {
   formatter(identity)
@@ -241,12 +263,14 @@ pub fn end2(formatter) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.string("Hello ")
-///     |> sb.arg_string
-///     ...
-///     |> sb.end3
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.string("Hello ")
+///   |> sb.arg_string
+///   ...
+///   |> sb.end3
+/// ```
 ///
 pub fn end3(formatter) {
   formatter(identity)
@@ -257,12 +281,14 @@ pub fn end3(formatter) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.string("Hello ")
-///     |> sb.arg_string
-///     ...
-///     |> sb.end4
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.string("Hello ")
+///   |> sb.arg_string
+///   ...
+///   |> sb.end4
+/// ```
 ///
 pub fn end4(formatter) {
   formatter(identity)
@@ -273,12 +299,14 @@ pub fn end4(formatter) {
 ///
 /// ## Example
 ///
-///   let formatter =
-///     sb.new
-///     |> sb.string("Hello ")
-///     |> sb.arg_string
-///     ...
-///     |> sb.end5
+/// ```
+/// let formatter =
+///   sb.new
+///   |> sb.string("Hello ")
+///   |> sb.arg_string
+///   ...
+///   |> sb.end5
+/// ```
 ///
 pub fn end5(formatter) {
   formatter(identity)
