@@ -47,8 +47,7 @@ formatter(Done)
 
 ## Installation
 
-If [available in Hex](https://www.rebar3.org/docs/dependencies#section-declaring-dependencies)
-this package can be installed by adding `gleam_string_builder` to your `rebar.config` dependencies:
+This package can be installed by adding `gleam_string_builder` to your `rebar.config` dependencies:
 
 ```erlang
 {deps, [
